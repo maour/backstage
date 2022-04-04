@@ -15,7 +15,7 @@
  */
 
 import chalk from 'chalk';
-import { Command } from 'commander';
+import { Command, OptionValues } from 'commander';
 import { relative as relativePath } from 'path';
 import { buildPackages, getOutputsForRole } from '../../lib/builder';
 import { PackageGraph } from '../../lib/monorepo';
@@ -77,12 +77,14 @@ function createScriptOptionsParser(anyCmd: Command, commandPath: string[]) {
   };
 }
 
-export async function command(cmd: Command): Promise<void> {
+export async function command(opts: OptionValues, cmd: Command): Promise<void> {
   let packages = await PackageGraph.listTargetPackages();
 
-  if (cmd.since) {
+  if (opts.since) {
     const graph = PackageGraph.fromPackages(packages);
-    const changedPackages = await graph.listChangedPackages({ ref: cmd.since });
+    const changedPackages = await graph.listChangedPackages({
+      ref: opts.since,
+    });
     const withDevDependents = graph.collectPackageNames(
       changedPackages.map(pkg => pkg.name),
       pkg => pkg.localDevDependents.keys(),
@@ -137,7 +139,7 @@ export async function command(cmd: Command): Promise<void> {
   console.log('Building packages');
   await buildPackages(options);
 
-  if (cmd.all) {
+  if (opts.all) {
     console.log('Building apps');
     await runParallelWorkers({
       items: apps,
