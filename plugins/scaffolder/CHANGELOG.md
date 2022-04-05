@@ -1,5 +1,12 @@
 # @backstage/plugin-scaffolder
 
+## 1.1.0-next.3
+
+### Minor Changes
+
+- 6331ec1ebc: Added a context menu to the scaffolder page that provides links to the template editor and actions reference. These links and the presence of the context menu can be toggled through the `contextMenu` prop of the scaffolder page.
+- 8fad3b6ef5: The Template Preview page has been renamed to Template Editor, and is not available at the `/edit` path instead. There is a redirect in place from `/preview`.
+
 ## 1.0.1-next.2
 
 ### Patch Changes
